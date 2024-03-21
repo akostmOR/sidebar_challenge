@@ -1,6 +1,6 @@
-.custom-aside {
+ .custom-aside {
     color: #271468;
-    padding: 20px;
+    padding: 50px;
     width: 460px; 
     height: 100%; 
     background-color: #ffffff; 
@@ -9,11 +9,13 @@
     position: absolute;
     top: 0;
     left: 0;
-    background-color: #e0e0e0;
+    overflow-y: auto;
+    
     padding-top: 1rem;   
     .nav-item {
 
       display: flex;
+      flex-direction: column;
       align-items: center;
       padding: 0.5rem 1rem; 
       text-decoration: none; 
@@ -74,4 +76,28 @@
     width: 100%;
     height: auto;
     display: block;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .top-level-item {
+    margin-bottom: 20px; 
+  }
+  
+  .sub-item {
+    margin-left: 20px; 
+  }
+  
+  .sub-sub-item {
+    padding: 10px;
+    margin-left: 20px; 
+  }
+
+  .picons{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }

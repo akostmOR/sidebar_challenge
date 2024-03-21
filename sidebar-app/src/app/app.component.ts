@@ -3,6 +3,13 @@ import { MockDataService } from 'src/services/mock-data.service';
 import { SidebarService } from 'src/services/sidebar.service';
 import { Company, Employee, Team, UserData } from '../interfaces/user.interface';
 
+
+interface OutputItem {
+  name: string;
+  items?: OutputItem[];
+  id?: string;
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -27,31 +34,32 @@ export class AppComponent implements OnInit {
 
 
 
-  transformData(data: Employee[]): Company[] {
-    const groupedData: Company[] = [];
-
-    data.forEach(({ id, name }) => {
-      const [companyName, teamName, employeeName] = name.split(' / ');
-
-      let company = groupedData.find(c => c.name === companyName);
-      if (!company) {
-        company = { name: companyName, items: [] };
-        groupedData.push(company);
-      }
-
-      if (teamName) {
-        let team = company.items.find((item: any) => 'name' in item && item.name === teamName) as Team;
-        if (!team) {
-          team = { name: teamName, items: [] };
-          company.items.push(team);
+  transformData(data: Employee[]): any[] {
+    const result: OutputItem[] = [];
+    data.forEach(item => {
+      const parts = item.name.split(' / ');
+      let currentLevel: OutputItem[] = result;
+  
+      parts.forEach((part, index) => {
+        let existingPart = currentLevel.find(({name}) => name === part);
+        if (!existingPart) {
+          existingPart = {
+            name: part,
+            items: [],
+          };
+          currentLevel.push(existingPart);
         }
-        team.items.push({ id, name: employeeName });
-      } else {
-        company.items.push({ id, name: employeeName });
-      }
+        if (index === parts.length - 1) {
+          existingPart.id = item.id;
+          existingPart.name = parts[parts.length - 1];
+          delete existingPart.items;
+        } else {
+          currentLevel = existingPart.items!;
+        }
+      });
     });
-    
-    return groupedData;
-  }
-}
+    console.log(result)
+    return result;
+ }
 
+}
