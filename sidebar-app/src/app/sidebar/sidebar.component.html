@@ -1,34 +1,50 @@
-<aside class="custom-aside"
-[ngClass]="{'sidebar-collapsed': (sidebarService.$collapsed | async), 'sidebar-expanded': !(sidebarService.$collapsed | async)}">
-<div class="aside-header">
-    <img src="assets/icons/Group 2.svg">
+<aside
+  class="custom-aside"
+  [ngClass]="{
+    'sidebar-collapsed': (sidebarService.$collapsed | async),
+    'sidebar-expanded': !(sidebarService.$collapsed | async)
+  }"
+>
+  <div class="aside-header">
+    <img src="assets/icons/Group 2.svg" />
     <div class="rounded-pic">
-        <img src="https://cdn.britannica.com/47/188747-050-1D34E743/Bill-Gates-2011.jpg" >
-      </div>
-</div>
-<h1>Companies</h1>
-<div class="container">
-  <div *ngFor="let topLevelItem of companies" class="top-level-item">
-    <h2>{{ topLevelItem.name }}</h2>
-    <div *ngFor="let subItem of topLevelItem.items" class="sub-item">
-      <ng-container *ngIf="subItem.items">
-        <h3>{{ subItem.name }}</h3>
-        <div *ngFor="let nestedItem of subItem.items" class="sub-sub-item">
-          <div class="picons">
-          <p>{{ nestedItem.name }}</p>
-          <img src="assets/icons/incoming icon.svg">
-          </div>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="!subItem.items">
-        <div class="picons">
-          <p>{{ subItem.name }}</p>
-          <img src="assets/icons/incoming icon.svg">
-        </div>
-      </ng-container>
+      <img
+        src="https://cdn.britannica.com/47/188747-050-1D34E743/Bill-Gates-2011.jpg"
+      />
     </div>
   </div>
-</div>
+  <h1>Companies</h1>
+  <div class="container">
+    <ng-container
+      *ngTemplateOutlet="
+        companies.items ? groupItem : name;
+        context: { $implicit: companies }
+      "
+    >
+    </ng-container>
+  </div>
 
   <button class="close" (click)="sidebarService.toggleCollapsed()">X</button>
 </aside>
+
+<ng-template #name let-item>
+  <div class="picons" style="padding-left: 15px">
+    <p>{{ item.name }}</p>
+    <img src="assets/icons/incoming icon.svg" />
+  </div>
+</ng-template>
+
+<ng-template #groupItem let-item>
+  <div style="padding-left: 15px">
+    <h3>{{ item.name }}</h3>
+    <div *ngFor="let subItem of item.items">
+      <ng-container
+        *ngTemplateOutlet="
+          subItem.items ? groupItem : name;
+          context: { $implicit: subItem }
+        "
+      >
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
