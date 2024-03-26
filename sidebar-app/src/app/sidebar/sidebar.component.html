@@ -15,36 +15,10 @@
   </div>
   <h1>Companies</h1>
   <div class="container">
-    <ng-container
-      *ngTemplateOutlet="
-        companies.items ? groupItem : name;
-        context: { $implicit: companies }
-      "
-    >
+    <ng-container *ngFor="let item of companies">
+      <app-group-item [item]="item"></app-group-item>
     </ng-container>
   </div>
 
   <button class="close" (click)="sidebarService.toggleCollapsed()">X</button>
 </aside>
-
-<ng-template #name let-item>
-  <div class="picons" style="padding-left: 15px">
-    <p>{{ item.name }}</p>
-    <img src="assets/icons/incoming icon.svg" />
-  </div>
-</ng-template>
-
-<ng-template #groupItem let-item>
-  <div style="padding-left: 15px">
-    <h3>{{ item.name }}</h3>
-    <div *ngFor="let subItem of item.items">
-      <ng-container
-        *ngTemplateOutlet="
-          subItem.items ? groupItem : name;
-          context: { $implicit: subItem }
-        "
-      >
-      </ng-container>
-    </div>
-  </div>
-</ng-template>

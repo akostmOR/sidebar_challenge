@@ -1,0 +1,11 @@
+<div style="padding-left: 15px">
+  <h3>{{ item.name }}</h3>
+  <div *ngFor="let subItem of item.items">
+    <ng-container *ngIf="subItem.items">
+      <app-group-item [item]="subItem"></app-group-item>
+    </ng-container>
+    <ng-container *ngIf="!subItem.items">
+      <app-person [item]="subItem"></app-person>
+    </ng-container>
+  </div>
+</div>
